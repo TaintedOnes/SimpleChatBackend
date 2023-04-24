@@ -30,14 +30,14 @@ namespace SimpleChat.API.Controllers
             this.appSettings = appSettings.Value;
         }
 
-       
+
         [HttpGet]
         public IActionResult GetAll()
         {
             var result = this.userManager.Users.ToList();
             return Ok(result);
         }
-       
+
         [HttpPost]
         [Route("Register")]
         //POST : /api/User/Register
