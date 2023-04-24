@@ -1,5 +1,4 @@
 ﻿using SimpleChat.Core.Entities;
-using SimpleChat.Core.Enums;
 
 namespace SimpleChat.Core.Model
 {

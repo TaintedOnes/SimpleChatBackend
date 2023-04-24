@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using SimpleChat.Core.Business_Interface;
 using SimpleChat.Core.Business_Interface.ServiceQuery;
-using SimpleChat.Core.Entities;
 using SimpleChat.Core.Model;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace SimpleChat.API.Controllers
 {

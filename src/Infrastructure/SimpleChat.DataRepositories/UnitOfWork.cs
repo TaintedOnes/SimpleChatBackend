@@ -1,9 +1,6 @@
 ﻿using SimpleChat.Core.Repository_Interfaces;
 using SimpleChat.DataRepositories.Context;
 using SimpleChat.DataRepositories.Repository;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,8 +9,6 @@ namespace SimpleChat.DataRepositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly SimpleChatDbContext simpleChatDbContext;
-
-
 
         public UnitOfWork(SimpleChatDbContext simpleChatDbContext)
         {

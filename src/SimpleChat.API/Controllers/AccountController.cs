@@ -1,21 +1,20 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using SimpleChat.API.Model;
+using SimpleChat.Core.AppSetting;
+using SimpleChat.Core.Entities;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using SimpleChat.API.Model;
-using SimpleChat.Core.AppSetting;
-using SimpleChat.Core.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 namespace SimpleChat.API.Controllers
 {
-    
+
     [Route("api/account")]
     [ApiController]
     public class AccountController : ControllerBase

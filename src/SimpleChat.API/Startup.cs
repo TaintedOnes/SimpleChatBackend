@@ -1,22 +1,22 @@
-using System;
-using SimpleChat.DependencyResolver;
-using SimpleChat.DataRepositories.Context;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using SimpleChat.Core.AppSetting;
-using System.Text;
-using SimpleChat.Core.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SimpleChat.API.Hubs;
-using Microsoft.AspNetCore.Http.Connections;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
+using SimpleChat.Core.AppSetting;
+using SimpleChat.Core.Entities;
+using SimpleChat.DataRepositories.Context;
+using SimpleChat.DependencyResolver;
+using System;
+using System.Text;
 
 namespace SimpleChat
 {
@@ -103,14 +103,8 @@ namespace SimpleChat
                
             }
 
-
             app.UseHttpsRedirection();
-
-          
-
-
             app.UseRouting();
-
             app.UseCors(builder =>
              builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString(), "http://localhost:4200")
              .AllowAnyHeader()
@@ -123,9 +117,6 @@ namespace SimpleChat
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
             app.UseAuthorization();
-
-
-           
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -138,8 +129,6 @@ namespace SimpleChat
             });
 
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "Simple Chat API V1"); });
-
-
         }
     }
 }

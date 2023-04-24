@@ -1,12 +1,9 @@
 ﻿using Autofac;
+using Microsoft.Extensions.DependencyInjection;
 using SimpleChat.Business;
 using SimpleChat.Business.ServiceQuery;
 using SimpleChat.Core.Business_Interface;
 using SimpleChat.Core.Business_Interface.ServiceQuery;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SimpleChat.DependencyResolver
 {

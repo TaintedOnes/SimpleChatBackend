@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SimpleChat.Core.AppSetting
+﻿namespace SimpleChat.Core.AppSetting
 {
     public class ApplicationSettings
     {

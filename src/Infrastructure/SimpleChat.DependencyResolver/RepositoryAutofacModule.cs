@@ -1,10 +1,7 @@
 ﻿using Autofac;
+using Microsoft.Extensions.DependencyInjection;
 using SimpleChat.Core.Repository_Interfaces;
 using SimpleChat.DataRepositories;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SimpleChat.DependencyResolver
 {

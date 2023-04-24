@@ -1,11 +1,10 @@
-﻿using SimpleChat.Core.Repository_Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SimpleChat.Core.Repository_Interfaces;
 using SimpleChat.DataRepositories.Context;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace SimpleChat.DataRepositories.Repository
 {

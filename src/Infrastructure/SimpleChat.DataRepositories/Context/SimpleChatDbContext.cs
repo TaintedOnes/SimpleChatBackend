@@ -1,9 +1,6 @@
-﻿using SimpleChat.Core.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SimpleChat.Core.Entities;
 
 namespace SimpleChat.DataRepositories.Context
 {

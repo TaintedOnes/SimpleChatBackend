@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace SimpleChat.Business.ServiceQuery
 {
-    public class MessageServiceQuery: IMessageServiceQuery
+    public class MessageServiceQuery : IMessageServiceQuery
     {
         private readonly IUnitOfWork unitOfWork;
         public MessageServiceQuery(IUnitOfWork unitOfWork)
@@ -32,7 +32,7 @@ namespace SimpleChat.Business.ServiceQuery
         {
             try
             {
-                var messages = this.unitOfWork.Repository<Message>().Get().Where(x=>x.Receiver==userId).ToList();
+                var messages = this.unitOfWork.Repository<Message>().Get().Where(x => x.Receiver == userId).ToList();
                 return messages;
             }
             catch (Exception)
