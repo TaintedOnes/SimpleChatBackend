@@ -1,7 +1,5 @@
 ﻿using SimpleChat.Core.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SimpleChat.Core.Business_Interface.ServiceQuery
 {

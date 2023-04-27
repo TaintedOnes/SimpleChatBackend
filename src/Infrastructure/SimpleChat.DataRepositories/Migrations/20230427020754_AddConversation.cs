@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SimpleChat.DataRepositories.Migrations
 {
-    public partial class addchatidtomessage : Migration
+    public partial class AddConversation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,11 +51,29 @@ namespace SimpleChat.DataRepositories.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Conversations",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChatId = table.Column<long>(type: "bigint", nullable: false),
+                    UserName = table.Column<string>(type: "VARCHAR(32)", maxLength: 32, nullable: true),
+                    FirstName = table.Column<string>(type: "VARCHAR(64)", maxLength: 64, nullable: true),
+                    LastName = table.Column<string>(type: "VARCHAR(64)", maxLength: 64, nullable: true),
+                    LastMessageDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Conversations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ChatId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChatId = table.Column<long>(type: "bigint", nullable: false),
                     Sender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Receiver = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MessageDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -231,6 +249,9 @@ namespace SimpleChat.DataRepositories.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Conversations");
 
             migrationBuilder.DropTable(
                 name: "Messages");

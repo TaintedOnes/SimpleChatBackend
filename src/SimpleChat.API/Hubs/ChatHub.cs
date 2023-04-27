@@ -1,19 +1,34 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using SimpleChat.Core.Business_Interface;
+using SimpleChat.Core.Business_Interface.ServiceQuery;
 using SimpleChat.Core.Entities;
 using SimpleChat.Core.Model;
+using SimpleChat.DataRepositories.Context;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Telegram.BotAPI;
+using Telegram.BotAPI.AvailableMethods;
 
 namespace SimpleChat.API.Hubs
 {
     public class ChatHub : Hub
     {
+        private readonly IMessageServiceQuery messageServiceQuery;
         private readonly IMessageService messageService;
-        public ChatHub(IMessageService messageService)
+        private readonly IConversationServiceQuery conversationServiceQuery;
+        private readonly IConfiguration _config;
+
+        public ChatHub(IMessageServiceQuery messageServiceQuery, IMessageService messageService, IConversationServiceQuery conversationServiceQuery, IConfiguration config)
         {
+            this.messageServiceQuery = messageServiceQuery;
             this.messageService = messageService;
+            this.conversationServiceQuery = conversationServiceQuery;
+            _config = config;
+
         }
         static IList<UserConnection> Users = new List<UserConnection>();
 
@@ -25,12 +40,16 @@ namespace SimpleChat.API.Hubs
             public string Username { get; set; }
         }
 
-        public Task SendMessageToUser(Message message)
+        public void SendMessageToUser(Message message)
         {
             var reciever = Users.FirstOrDefault(x => x.UserId == message.Receiver);
             var connectionId = reciever == null ? "offlineUser" : reciever.ConnectionId;
+            message.MessageDate = message.MessageDate.ToLocalTime();
             this.messageService.Add(message);
-            return Clients.Client(connectionId).SendAsync("ReceiveDM", Context.ConnectionId, message);
+
+            var botToken = _config.GetValue<string>("BotConfiguration:BotToken");
+            var api = new BotClient(botToken);
+            api.SendMessage(message.ChatId, message.Content); // Send a message to user
         }
 
         public async Task DeleteMessage(MessageDeleteModel message)
@@ -74,6 +93,40 @@ namespace SimpleChat.API.Hubs
                 Users.Remove(i);
 
             Clients.All.SendAsync("BroadcastUserOnDisconnect", Users);
+        }
+        public void SendMessage(Telegram.Bot.Types.Message message)
+        {
+            var messages = messageServiceQuery.GetAll().Select(x => x.ChatId == message.Chat.Id);
+            var conversations = conversationServiceQuery.GetAllConversation().Where(x => x.ChatId == message.Chat.Id);
+
+            if (conversations.Any())
+            {
+            }
+            else
+            {
+                Conversation conversation  = new Conversation
+                {
+                    ChatId = message.Chat.Id,
+                    UserName = message.From.Username,
+                    FirstName = message.From.FirstName,
+                    LastName = message.From.LastName,
+                    LastMessageDate = DateTime.Now,
+                };
+                conversationServiceQuery.Add(conversation);
+            }
+
+            Message msg = new Message
+            {
+                ChatId = message.Chat.Id,
+                MessageDate = DateTime.Now,
+                Content = message.Text,
+                Receiver = "ddc40a23-d935-4ca6-bcaa-544e50edd911"
+            };
+            messageService.Add(msg);
+
+            var reciever = Users.FirstOrDefault(x => x.UserId == msg.Receiver);
+            var connectionId = reciever == null ? "offlineUser" : reciever.ConnectionId;
+            Clients.Client(connectionId).SendAsync("ReceiveDM", connectionId, msg);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace SimpleChat.DependencyResolver
         {
             builder.RegisterType<IMessageService>().As<MessageService>();
             builder.RegisterType<IMessageServiceQuery>().As<MessageServiceQuery>();
+            builder.RegisterType<IConversationServiceQuery>().As<ConversationServiceQuery>();
             return builder;
         }
     }
@@ -23,6 +24,7 @@ namespace SimpleChat.DependencyResolver
         {
             builder.RegisterType<MessageService>().As<IMessageService>();
             builder.RegisterType<MessageServiceQuery>().As<IMessageServiceQuery>();
+            builder.RegisterType<ConversationServiceQuery>().As<IConversationServiceQuery>();
         }
     }
 }

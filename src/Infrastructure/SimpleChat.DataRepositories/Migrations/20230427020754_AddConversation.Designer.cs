@@ -10,8 +10,8 @@ using SimpleChat.DataRepositories.Context;
 namespace SimpleChat.DataRepositories.Migrations
 {
     [DbContext(typeof(SimpleChatDbContext))]
-    [Migration("20230424070018_addchatidtomessage")]
-    partial class addchatidtomessage
+    [Migration("20230427020754_AddConversation")]
+    partial class AddConversation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -223,13 +223,45 @@ namespace SimpleChat.DataRepositories.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("SimpleChat.Core.Entities.Conversation", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<long>("ChatId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(64)
+                        .HasColumnType("VARCHAR(64)");
+
+                    b.Property<DateTime>("LastMessageDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(64)
+                        .HasColumnType("VARCHAR(64)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(32)
+                        .HasColumnType("VARCHAR(32)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Conversations");
+                });
+
             modelBuilder.Entity("SimpleChat.Core.Entities.Message", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
 
-                    b.Property<string>("ChatId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long>("ChatId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");

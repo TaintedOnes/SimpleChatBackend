@@ -11,7 +11,6 @@ namespace SimpleChat.API.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        
         private readonly IMessageServiceQuery messageServiceQuery;
         private readonly IMessageService messageService;
         public MessageController(IMessageServiceQuery messageServiceQuery,IMessageService messageService)

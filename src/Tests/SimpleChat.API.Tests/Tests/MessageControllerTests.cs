@@ -30,8 +30,8 @@ namespace SimpleChat.API.Tests
         public void GetAll_should_return_data_saved_in_database()
         {
             var messages = new List<Message>{
-                new Message{Id=Guid.NewGuid().ToString(),Content="Hi Bulbul", Sender="Ehasanul", Receiver="Bulbul"},
-                new Message{Id=Guid.NewGuid().ToString(),Content="Hi Ehasanul", Sender="Bulbul", Receiver="Ehasanul"},
+                new Message{Id=Convert.ToInt64(Guid.NewGuid()),Content="Hi Bulbul", Sender="Ehasanul", Receiver="Bulbul"},
+                new Message{Id=Convert.ToInt64(Guid.NewGuid()),Content="Hi Ehasanul", Sender="Bulbul", Receiver="Ehasanul"},
             };
             this.messageServiceQuery.Setup(x => x.GetAll()).Returns(messages);
             var result = sut.GetAll() as OkObjectResult;

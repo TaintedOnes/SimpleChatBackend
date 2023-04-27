@@ -1,11 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SimpleChat.Core.Entities
 {
     public class Message
     {
-        public string Id { get; set; }
-        public string ChatId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
+        public long ChatId { get; set; }
         public string Sender { get; set; }
         public string Receiver { get; set; }
         public DateTime MessageDate { get; set; }
