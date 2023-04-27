@@ -120,8 +120,8 @@ namespace SimpleChat.API.Hubs
                 ChatId = message.Chat.Id,
                 MessageDate = DateTime.Now,
                 Content = message.Text,
-                Receiver = "ddc40a23-d935-4ca6-bcaa-544e50edd911"
-            };
+                Receiver = Users.FirstOrDefault().UserId
+        };
             messageService.Add(msg);
 
             var reciever = Users.FirstOrDefault(x => x.UserId == msg.Receiver);
