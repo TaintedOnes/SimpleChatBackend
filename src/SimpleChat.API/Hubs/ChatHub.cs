@@ -46,6 +46,7 @@ namespace SimpleChat.API.Hubs
             var connectionId = reciever == null ? "offlineUser" : reciever.ConnectionId;
             message.MessageDate = message.MessageDate.ToLocalTime();
             this.messageService.Add(message);
+            conversationServiceQuery.Update(message.ChatId);
 
             var botToken = _config.GetValue<string>("BotConfiguration:BotToken");
             var api = new BotClient(botToken);
@@ -96,11 +97,10 @@ namespace SimpleChat.API.Hubs
         }
         public void SendMessage(Telegram.Bot.Types.Message message)
         {
-            var messages = messageServiceQuery.GetAll().Select(x => x.ChatId == message.Chat.Id);
             var conversations = conversationServiceQuery.GetAllConversation().Where(x => x.ChatId == message.Chat.Id);
-
             if (conversations.Any())
             {
+                conversationServiceQuery.Update(message.Chat.Id);
             }
             else
             {

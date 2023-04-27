@@ -7,5 +7,6 @@ namespace SimpleChat.Core.Business_Interface.ServiceQuery
     {
         IEnumerable<Conversation> GetAllConversation();
         void Add(Conversation conversation);
+        void Update(long chatId);
     }
 }
