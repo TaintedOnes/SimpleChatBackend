@@ -55,7 +55,7 @@ namespace SimpleChat.API.Hubs
 
         public async Task DeleteMessage(MessageDeleteModel message)
         {
-            var deletedMessage=await this.messageService.DeleteMessage(message);
+            var deletedMessage = await this.messageService.DeleteMessage(message);
             await Clients.All.SendAsync("BroadCastDeleteMessage", Context.ConnectionId, deletedMessage);
         }
 
@@ -95,6 +95,12 @@ namespace SimpleChat.API.Hubs
 
             Clients.All.SendAsync("BroadcastUserOnDisconnect", Users);
         }
+
+        public void MarkAllUnreadMessage(long chatId)
+        {
+            messageService.MarkAllMessagesAsRead(chatId);
+        }
+
         public void SendMessage(Telegram.Bot.Types.Message message)
         {
             var conversations = conversationServiceQuery.GetAllConversation().Where(x => x.ChatId == message.Chat.Id);
@@ -104,7 +110,7 @@ namespace SimpleChat.API.Hubs
             }
             else
             {
-                Conversation conversation  = new Conversation
+                Conversation conversation = new Conversation
                 {
                     ChatId = message.Chat.Id,
                     UserName = message.From.Username,
@@ -121,12 +127,13 @@ namespace SimpleChat.API.Hubs
                 MessageDate = DateTime.Now,
                 Content = message.Text,
                 Receiver = Users.FirstOrDefault().UserId
-        };
+            };
             messageService.Add(msg);
 
             var reciever = Users.FirstOrDefault(x => x.UserId == msg.Receiver);
             var connectionId = reciever == null ? "offlineUser" : reciever.ConnectionId;
             Clients.Client(connectionId).SendAsync("ReceiveDM", connectionId, msg);
+            Clients.All.SendAsync("NewMessage", message.Chat.Id);
         }
     }
 }

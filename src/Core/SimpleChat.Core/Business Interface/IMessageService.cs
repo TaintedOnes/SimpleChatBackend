@@ -7,6 +7,7 @@ namespace SimpleChat.Core.Business_Interface
     public interface IMessageService
     {
         void Add(Message message);
+        void MarkAllMessagesAsRead(long chatId);
         Task<Message> DeleteMessage(MessageDeleteModel messageDeleteModel);
     }
 }
