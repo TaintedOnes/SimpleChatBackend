@@ -51,6 +51,7 @@ namespace SimpleChat.API.Hubs
             var botToken = _config.GetValue<string>("BotConfiguration:BotToken");
             var api = new BotClient(botToken);
             api.SendMessage(message.ChatId, message.Content); // Send a message to user
+            Clients.All.SendAsync("SentDM", connectionId, message);
         }
 
         public async Task DeleteMessage(MessageDeleteModel message)
@@ -126,13 +127,14 @@ namespace SimpleChat.API.Hubs
                 ChatId = message.Chat.Id,
                 MessageDate = DateTime.Now,
                 Content = message.Text,
-                Receiver = Users.FirstOrDefault().UserId
+                Receiver = "Q!n057TSn6@w"
             };
             messageService.Add(msg);
 
             var reciever = Users.FirstOrDefault(x => x.UserId == msg.Receiver);
             var connectionId = reciever == null ? "offlineUser" : reciever.ConnectionId;
-            Clients.Client(connectionId).SendAsync("ReceiveDM", connectionId, msg);
+            //Clients.Client(connectionId).SendAsync("ReceiveDM", connectionId, msg);
+            Clients.All.SendAsync("ReceiveDM", connectionId, msg);
             Clients.All.SendAsync("NewMessage", message.Chat.Id);
         }
     }
