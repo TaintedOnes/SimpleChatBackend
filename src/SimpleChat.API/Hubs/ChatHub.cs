@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SimpleChat.Core.Business_Interface;
 using SimpleChat.Core.Business_Interface.ServiceQuery;
 using SimpleChat.Core.Entities;
 using SimpleChat.Core.Model;
-using SimpleChat.DataRepositories.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Telegram.Bot.Types.Enums;
 using Telegram.BotAPI;
 using Telegram.BotAPI.AvailableMethods;
 
@@ -21,6 +22,7 @@ namespace SimpleChat.API.Hubs
         private readonly IMessageService messageService;
         private readonly IConversationServiceQuery conversationServiceQuery;
         private readonly IConfiguration _config;
+        private readonly string _botToken;
 
         public ChatHub(IMessageServiceQuery messageServiceQuery, IMessageService messageService, IConversationServiceQuery conversationServiceQuery, IConfiguration config)
         {
@@ -28,9 +30,10 @@ namespace SimpleChat.API.Hubs
             this.messageService = messageService;
             this.conversationServiceQuery = conversationServiceQuery;
             _config = config;
-
+            _botToken = config.GetValue<string>("BotConfiguration:BotToken");
         }
         static IList<UserConnection> Users = new List<UserConnection>();
+        static HttpClient client = new HttpClient();
 
         public class UserConnection
         {
@@ -48,14 +51,23 @@ namespace SimpleChat.API.Hubs
             this.messageService.Add(message);
             conversationServiceQuery.Update(message.ChatId);
 
-            var botToken = _config.GetValue<string>("BotConfiguration:BotToken");
+            var botToken = _botToken;
             var api = new BotClient(botToken);
             api.SendMessage(message.ChatId, message.Content); // Send a message to user
         }
 
+        public void SendPhotoToUser(Message message)
+        {
+            var reciever = Users.FirstOrDefault(x => x.UserId == message.Receiver);
+            var connectionId = reciever == null ? "offlineUser" : reciever.ConnectionId;
+            message.MessageDate = message.MessageDate.ToLocalTime();
+            this.messageService.Add(message);
+            conversationServiceQuery.Update(message.ChatId);
+        }
+
         public async Task DeleteMessage(MessageDeleteModel message)
         {
-            var deletedMessage=await this.messageService.DeleteMessage(message);
+            var deletedMessage = await this.messageService.DeleteMessage(message);
             await Clients.All.SendAsync("BroadCastDeleteMessage", Context.ConnectionId, deletedMessage);
         }
 
@@ -104,7 +116,7 @@ namespace SimpleChat.API.Hubs
             }
             else
             {
-                Conversation conversation  = new Conversation
+                Conversation conversation = new Conversation
                 {
                     ChatId = message.Chat.Id,
                     UserName = message.From.Username,
@@ -115,18 +127,47 @@ namespace SimpleChat.API.Hubs
                 conversationServiceQuery.Add(conversation);
             }
 
+            string content = message.Text ?? "";
+            if (message.Type == MessageType.Photo)
+            {
+                content = GetPhoto(message.Photo[^1].FileId);
+            }
+
             Message msg = new Message
             {
                 ChatId = message.Chat.Id,
                 MessageDate = DateTime.Now,
-                Content = message.Text,
+                Content = content,
+                ContentType = (int)message.Type,
                 Receiver = Users.FirstOrDefault().UserId
-        };
+            };
             messageService.Add(msg);
 
             var reciever = Users.FirstOrDefault(x => x.UserId == msg.Receiver);
             var connectionId = reciever == null ? "offlineUser" : reciever.ConnectionId;
             Clients.Client(connectionId).SendAsync("ReceiveDM", connectionId, msg);
+        }
+
+        public string GetPhoto(string photoID)
+        {
+            string photoApiUrl = string.Format("https://api.telegram.org/bot{0}/getFile?file_id={1}", _botToken, photoID);
+            HttpResponseMessage response = Task.Run(async () => await client.GetAsync(photoApiUrl)).Result;
+            string photoPath = "";
+            if (response.IsSuccessStatusCode)
+            {
+                string resContent = Task.Run(async () => await response.Content.ReadAsStringAsync()).Result;
+                TelegramPhotoResponse test = JsonConvert.DeserializeObject<TelegramPhotoResponse>(resContent);
+                if (test.Ok)
+                {
+                    photoPath = test.Result.FilePath;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(photoPath))
+            {
+                return string.Format("https://api.telegram.org/file/bot{0}/{1}", _botToken, photoPath);
+            }
+            return "";
         }
     }
 }

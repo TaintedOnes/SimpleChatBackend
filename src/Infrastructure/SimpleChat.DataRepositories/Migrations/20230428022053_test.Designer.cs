@@ -10,8 +10,8 @@ using SimpleChat.DataRepositories.Context;
 namespace SimpleChat.DataRepositories.Migrations
 {
     [DbContext(typeof(SimpleChatDbContext))]
-    [Migration("20230427020754_AddConversation")]
-    partial class AddConversation
+    [Migration("20230428022053_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -265,6 +265,9 @@ namespace SimpleChat.DataRepositories.Migrations
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ContentType")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsNew")
                         .HasColumnType("bit");

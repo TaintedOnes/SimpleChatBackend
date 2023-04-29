@@ -106,7 +106,7 @@ namespace SimpleChat
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors(builder =>
-             builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString(), "http://localhost:4200")
+             builder.WithOrigins(Configuration["ApplicationSettings:Client_URL"].ToString(), "http://localhost:4500")
              .AllowAnyHeader()
              .AllowAnyMethod()
              .AllowCredentials()

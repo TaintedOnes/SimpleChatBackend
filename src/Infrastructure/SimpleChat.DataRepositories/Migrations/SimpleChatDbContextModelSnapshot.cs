@@ -264,6 +264,9 @@ namespace SimpleChat.DataRepositories.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ContentType")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsNew")
                         .HasColumnType("bit");
 

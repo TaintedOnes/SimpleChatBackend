@@ -12,6 +12,7 @@ namespace SimpleChat.Core.Entities
         public string Receiver { get; set; }
         public DateTime MessageDate { get; set; }
         public string Content { get; set; }
+        public int ContentType { get; set; }
         public bool IsNew { get; set; }
         public bool IsSenderDeleted { get; set; }
         public bool IsReceiverDeleted { get; set; }

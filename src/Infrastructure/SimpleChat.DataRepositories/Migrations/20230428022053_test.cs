@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SimpleChat.DataRepositories.Migrations
 {
-    public partial class AddConversation : Migration
+    public partial class test : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -78,6 +78,7 @@ namespace SimpleChat.DataRepositories.Migrations
                     Receiver = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MessageDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContentType = table.Column<int>(type: "int", nullable: false),
                     IsNew = table.Column<bool>(type: "bit", nullable: false),
                     IsSenderDeleted = table.Column<bool>(type: "bit", nullable: false),
                     IsReceiverDeleted = table.Column<bool>(type: "bit", nullable: false)
