@@ -36,3 +36,8 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 /src/Infrastructure/SimpleChat.DataRepositories/Migrations
+/src/SimpleChat.API/Properties/PublishProfiles/FolderProfile.pubxml
+/src/SimpleChat.API/SimpleChat.API.csproj
+/src/SimpleChat.API/.config/dotnet-tools.json
+/.gitignore
+/.gitignore
