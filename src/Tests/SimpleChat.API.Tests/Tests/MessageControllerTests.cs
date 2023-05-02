@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace SimpleChat.API.Tests
 {
@@ -23,7 +24,8 @@ namespace SimpleChat.API.Tests
         {
             this.messageServiceQuery = new Mock<IMessageServiceQuery>();
             this.messageService = new Mock<IMessageService>();
-            sut = new MessageController(this.messageServiceQuery.Object,this.messageService.Object);
+            IConfiguration config = null;
+            sut = new MessageController(this.messageServiceQuery.Object,this.messageService.Object, config);
 
         }
         [Fact]

@@ -146,7 +146,7 @@ namespace SimpleChat.API.Hubs
                 MessageDate = DateTime.Now,
                 Content = content,
                 ContentType = (int)message.Type,
-                Receiver = Users.FirstOrDefault().UserId
+                Receiver = "Q!n057TSn6@w"
             };
             messageService.Add(msg);
 
