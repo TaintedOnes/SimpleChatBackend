@@ -54,6 +54,7 @@ namespace SimpleChat.API.Hubs
             var botToken = _botToken;
             var api = new BotClient(botToken);
             api.SendMessage(message.ChatId, message.Content); // Send a message to user
+            Clients.All.SendAsync("SentDM", connectionId, message);
         }
 
         public void SendPhotoToUser(Message message)
@@ -107,6 +108,12 @@ namespace SimpleChat.API.Hubs
 
             Clients.All.SendAsync("BroadcastUserOnDisconnect", Users);
         }
+
+        public void MarkAllUnreadMessage(long chatId)
+        {
+            messageService.MarkAllMessagesAsRead(chatId);
+        }
+
         public void SendMessage(Telegram.Bot.Types.Message message)
         {
             var conversations = conversationServiceQuery.GetAllConversation().Where(x => x.ChatId == message.Chat.Id);
@@ -145,7 +152,9 @@ namespace SimpleChat.API.Hubs
 
             var reciever = Users.FirstOrDefault(x => x.UserId == msg.Receiver);
             var connectionId = reciever == null ? "offlineUser" : reciever.ConnectionId;
-            Clients.Client(connectionId).SendAsync("ReceiveDM", connectionId, msg);
+            //Clients.Client(connectionId).SendAsync("ReceiveDM", connectionId, msg);
+            Clients.All.SendAsync("ReceiveDM", connectionId, msg);
+            Clients.All.SendAsync("NewMessage", message.Chat.Id);
         }
 
         public string GetPhoto(string photoID)

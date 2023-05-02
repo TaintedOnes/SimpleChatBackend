@@ -13,7 +13,7 @@ namespace SimpleChat.Core.Entities
         public DateTime MessageDate { get; set; }
         public string Content { get; set; }
         public int ContentType { get; set; }
-        public bool IsNew { get; set; }
+        public bool IsNew { get; set; } = true; // Set the default value to true
         public bool IsSenderDeleted { get; set; }
         public bool IsReceiverDeleted { get; set; }
     }

@@ -4,6 +4,7 @@ using SimpleChat.Core.Entities;
 using SimpleChat.Core.Enums;
 using SimpleChat.Core.Model;
 using SimpleChat.Core.Repository_Interfaces;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +22,19 @@ namespace SimpleChat.Business
             this.unitOfWork.Repository<Message>().Add(message);
             this.unitOfWork.SaveChanges();
         }
+        public void MarkAllMessagesAsRead(long chatId)
+        {
+            var messages = unitOfWork.Repository<Message>().Get()
+                .Where(m => m.ChatId == chatId && m.IsNew == true)
+                .ToList();
+            foreach (var message in messages)
+            {
+                message.IsNew = false;
+                unitOfWork.Repository<Message>().Update(message);
+            }
+            unitOfWork.SaveChanges();
+        }
+
         async Task<Message> IMessageService.DeleteMessage(MessageDeleteModel messageDeleteModel)
         {
             // var message = messageDeleteModel.Message;
