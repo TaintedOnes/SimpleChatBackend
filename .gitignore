@@ -41,3 +41,7 @@ msbuild.wrn
 /src/SimpleChat.API/.config/dotnet-tools.json
 /.gitignore
 /.gitignore
+/src/SimpleChat.API/appsettings.json
+/src/Infrastructure/SimpleChat.DataRepositories/Migrations/20230428022053_test.cs
+/src/Infrastructure/SimpleChat.DataRepositories/SimpleChat.DataRepositories.csproj
+/src/Infrastructure/SimpleChat.DataRepositories/Migrations/20230428022053_test.Designer.cs
